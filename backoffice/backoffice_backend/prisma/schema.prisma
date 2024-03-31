@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Association{
+  id                        Int          @id @default(autoincrement())
+  name                      String       @unique
+  siret                     String?      @unique
+  description               String?
+  category                  String
+  representative_name       String?
+  representative_surname    String?
+  mail 					            String?
+  phone 					          String?
+  address 				          String
+  complement_address			  String?
+  town					            String
+  postal_code               String
+  longitude				          String
+  latitude 				          String
+  event                     Event[]
+  closed                    Boolean       @default(false)
+}
+
+model Event {
+  id                        Int             @id @default(autoincrement())
+  name                      String
+  start_date 			          DateTime
+  end_date			            DateTime
+  association 		          Association     @relation(fields: [id_association], references:[id])
+  id_association            Int
+  address	        		      String
+  complement_address		    String?
+  town 				              String
+  postal_code 			        String
+  longitude			            String
+  latitude 			            String
+  archived                  Boolean
+}
+
+model User {
+  id                 Int          @id @default(autoincrement())
+  email              String       @unique       
+  password           String
+  role               String       @default("En attente")
+}

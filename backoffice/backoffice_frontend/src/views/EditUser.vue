@@ -13,7 +13,6 @@
                     password : "",
                     role: "",
                 }, 
-                token: localStorage.getItem('token'),
             }
         },
 

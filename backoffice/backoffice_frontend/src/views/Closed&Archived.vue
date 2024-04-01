@@ -35,7 +35,7 @@
 
     <div class="view-selection">
         <button id="associations" @click="view = 'associations'" :class="{ active: view === 'associations' }">Associations fermées</button>
-        <button id="events" @click="view = 'events'" :class="{ active: view === 'events' }">Evènements terminés</button>
+        <button id="events" @click="view = 'events'" :class="{ active: view === 'events' }">Évènements terminés</button>
     </div>
 
     <div v-if="view == 'associations'">

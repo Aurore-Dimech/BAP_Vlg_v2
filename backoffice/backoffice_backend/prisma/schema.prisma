@@ -11,7 +11,7 @@ model Association{
   id                        Int          @id @default(autoincrement())
   name                      String       @unique
   siret                     String?      @unique
-  description               String?
+  description               String?      @db.LongText
   category                  String
   representative_name       String?
   representative_surname    String?
@@ -34,6 +34,8 @@ model Event {
   end_date			            DateTime
   association 		          Association     @relation(fields: [id_association], references:[id])
   id_association            Int
+  description               String?         @db.LongText
+  image                     String?
   address	        		      String
   complement_address		    String?
   town 				              String

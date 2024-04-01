@@ -99,10 +99,9 @@ header {
   width: 86vw;
   margin: 0 auto;
   align-items: center;
-  padding: 15px 0;
+  padding-block: 15px;
   background-color: #CECECE;
   border-radius: 15px;
-  height: 40px;
   margin-bottom: 6vh;
 }
 
@@ -112,6 +111,7 @@ header a {
 }
 
 .wrapper{
+  padding-inline: 15px;
   width: 100%;
 }
 
@@ -120,10 +120,13 @@ nav{
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
+  flex-wrap: wrap;
+  row-gap: 0.5em;
 }
 
 nav a {
   position: relative;
+  padding-inline: 10px;
 }
 
 nav a:hover::after {

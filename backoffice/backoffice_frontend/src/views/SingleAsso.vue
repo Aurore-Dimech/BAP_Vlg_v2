@@ -154,7 +154,7 @@
                 <p>{{ this.association.address }} <span v-if="this.association.complement_address != '' && association.complement_address != null"> {{ this.association.complement_address }}</span> {{ this.association.postal_code }} {{ this.association.town }}</p>
             </div>
         </div>
-        <h2>Evènements</h2>
+        <h2>Évènements</h2>
         <div>
             <div>
                 <p v-if="this.events.length === 0"> Pas d'évènements prévus</p>

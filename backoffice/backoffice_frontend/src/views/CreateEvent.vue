@@ -13,6 +13,8 @@
                     start_date : "",
                     end_date: "",
                     id_association: "none",
+                    description: "",
+                    image: "",
                     address: "",
                     complement_address: "",
                     town: "",
@@ -53,6 +55,8 @@
                         start_date : "",
                         end_date: "",
                         id_association: "none",
+                        description: "",
+                        image: "",
                         address: "",
                         complement_address: "",
                         town: "",
@@ -118,6 +122,10 @@
                         <input class="form-control" type="datetime-local" placeholder="Date et heure de fin" v-model="event.end_date">
                         <p v-if="event.end_date.length < 1" class="error">Champ obligatoire</p>
                     </div>
+                </div>
+
+                <div>
+                    <textarea class="form-description" type="text" placeholder="Description" v-model="event.description"></textarea>
                 </div>
                 
                 

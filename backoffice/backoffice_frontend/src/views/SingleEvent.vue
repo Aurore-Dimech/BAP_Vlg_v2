@@ -53,6 +53,7 @@
         created: function(){
             this.verifyConnection();
             this.getAssociationById();
+            this.getEventById();
         },
 
         methods:{
@@ -116,7 +117,7 @@
     <h1>{{ event.name }}</h1>
 
     <div id="main">
-        <h2>Evènement</h2>
+        <h2>Évènement</h2>
         <div>
             <div>
                 <p>Date de début : {{ startDate.slice(0, 10) }}</p>
@@ -124,6 +125,8 @@
                 <p>Heure de début : {{ startDate.slice(11, 16) }}</p>
                 <p>Heure de fin: {{ endDate.slice(11, 16) }}</p>
                 <p>Association : {{ this.association.name }}</p>
+
+                <p>Description :  {{ this.event.description }}</p>
             </div>
         </div>
         <h2>Coordonnées</h2>
@@ -132,7 +135,7 @@
                 <p>{{ this.event.adress }} <span v-if="this.event.complement_address != ''"> {{ this.event.complement_address }}</span> {{ this.event.postal_code }} {{ this.event.town }}</p>
             </div>
         </div>
-        <h2>Etat</h2>
+        <h2>État</h2>
         <p>{{ this.event.archived }}</p>
         <div id="fullmap">
             <div id="map"> </div>

@@ -50,7 +50,7 @@
 
 <template>
     <div class="fond">
-       <h1 id="Titre">Rechercher un évenement</h1>
+       <h1 id="Titre">Rechercher un évènement</h1>
 
        <div class="container">
             <div class="search-bar">

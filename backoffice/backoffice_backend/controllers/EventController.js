@@ -84,17 +84,34 @@ const createEvent = (req, res) => {
     }
 }
 
-const updateEvent = (req, res) => {
+const updateEvent = async (req, res) => {
     let id = Number(req.params.id)
-    let event = req.body
+
+    let event = {
+        name: req.body.name,
+        start_date: req.body.start_date,
+        end_date: req.body.end_date,
+        id_association: req.body.id_association,
+        description: req.body.description,
+        image: req.body.image === 'REMOVE_IMAGE' ? null : (req.file ? req.file.path : undefined),
+        address: req.body.address,
+        complement_address: req.body.complement_address,
+        town: req.body.town,
+        postal_code: req.body.postal_code,
+        longitude: req.body.longitude,
+        latitude: req.body.latitude,
+        archived: req.body.archived,
+    }
+
     let startDate = new Date(event.start_date);
     let endDate = new Date(event.end_date);
+    let archivedState = event.archived === 'true' ? true : false
 
     if (event.name === '' || event.start_date === '' || event.end_date === '' || event.id_association === '' || event.address === '' || event.town === '' || event.postal_code === '' || event.longitude === '' || event.latitude === ''){
         return res.status(400).json({ error: 'The name, start date, end date, association, address, town, postal code, longitude and latitude cannot be empty' })
     } else {
 
-        prisma.event.update({
+        await prisma.event.update({
             where : {
                 id: id
             },
@@ -103,19 +120,22 @@ const updateEvent = (req, res) => {
                 start_date: startDate.toISOString(),
                 end_date: endDate.toISOString(),
                 id_association: Number(event.id_association),
+                description: event.description,
+                image: event.image,
                 address: event.address,
                 complement_address: event.complement_address,
                 town: event.town,
                 postal_code: event.postal_code,
                 longitude: event.longitude,
                 latitude: event.latitude,
-                archived: event.archived
+                archived: archivedState
             }
         })
         .then((event) => {
             res.json(event)
         })
         .catch((error) => {
+            console.log(error)
             res.json(error)
         })
     }

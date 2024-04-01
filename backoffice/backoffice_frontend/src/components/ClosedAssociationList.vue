@@ -34,7 +34,7 @@
  
              <thead>
                  <tr id="tab-titles">
-                     <th>Association</th>
+                     <th>Associations</th>
                      <th>Actions</th>
                  </tr>
              </thead>

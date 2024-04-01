@@ -119,28 +119,31 @@
                 <h1>Modifier une association</h1>
 
                 <div id="main">
-                    
-                    <h2>Identité de l'association</h2>
-                    <div class="form-group">
-                        <div>
-                            <input type="text" class="form-control" id="inputEmail4" placeholder="Nom de l'association" v-model="association.name">
-                            <p v-if="association.name.length < 1" class="error">Champ obligatoire</p>
+
+                    <div class="section first">
+                        <h2>Identité de l'association</h2>
+                        <div class="form-group">
+                            <div>
+                                <input type="text" class="form-control" id="inputEmail4" placeholder="Nom de l'association" v-model="association.name">
+                                <p v-if="association.name.length < 1" class="error">Champ obligatoire</p>
+                            </div>
+    
+                            <input type="text" class="form-control" placeholder="Numéro SIRET" v-model="association.siret">
+    
+                            <div>
+                                <select class="select" name="category" id="category" v-model="association.category">
+                                    <option value="" disabled selected>Catégorie</option>
+                                    <option v-for="category in categories" :value="category.value">{{ category.name }}</option>
+                                </select>
+                                <p v-if="association.category === 'none'" class="error">Champ obligatoire</p>
+                            </div>
                         </div>
-
-                        <input type="text" class="form-control" placeholder="Numéro SIRET" v-model="association.siret">
-
+                        
                         <div>
-                            <select class="select" name="category" id="category" v-model="association.category">
-                                <option value="" disabled selected>Catégorie</option>
-                                <option v-for="category in categories" :value="category.value">{{ category.name }}</option>
-                            </select>
-                            <p v-if="association.category === 'none'" class="error">Champ obligatoire</p>
+                            <textarea class="form-description" type="text" placeholder="Description" v-model="association.description"></textarea>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <textarea class="form-control" id="description" rows="3" placeholder="Description" v-model="association.description"></textarea>
-                    </div>
 
                     <h2>Représentant-e</h2>
                     <div class="form-group">
@@ -199,7 +202,7 @@
                     
                     
                     <div>
-                        <h2>Etat</h2>
+                        <h2>État</h2>
                         <div>
                             <select class="select" name="closed" id="closed" v-model="association.closed">
                                 <option value="false">ouverte</option>
@@ -275,7 +278,11 @@ h2:not(:first-of-type) {
     font-family: Poppins;
     font-size: 16px;
     font-weight: 600;
-} 
+}
+
+.form-description {
+    width: 38.5vw;
+}
     
 .select {
     width: 17vw;

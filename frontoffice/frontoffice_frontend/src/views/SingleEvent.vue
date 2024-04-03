@@ -73,7 +73,7 @@
             async getEventById() {
                 try {
                     const response = await axios.get(
-                    `http://localhost:4000/events/${this.$route.params.id}`
+                    `${import.meta.env.VITE_SERVER_URL}/events/${this.$route.params.id}`
                     );
                     this.event = response.data;
 
@@ -90,7 +90,7 @@
                 try {
                     await this.getEventById()
                     const response = await axios.get(
-                    `http://localhost:4000/associations/${Number(this.event.id_association)}`
+                    `${import.meta.env.VITE_SERVER_URL}/associations/${Number(this.event.id_association)}`
                     );
                     this.association = response.data;
 

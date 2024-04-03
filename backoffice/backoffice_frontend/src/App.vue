@@ -47,7 +47,7 @@ export default {
           },
 
           async verifyRole(){
-            const response = await axios.get("http://localhost:3000/users/connection", {headers: {'x-access-token' : this.token}});
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/users/connection`, {headers: {'x-access-token' : this.token}});
             
             if (!response.data.error){
               this.superadmin = true

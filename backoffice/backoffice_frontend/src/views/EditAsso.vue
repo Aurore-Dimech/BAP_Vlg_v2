@@ -15,6 +15,7 @@
                     category: "",
                     representative_name: "",
                     representative_surname: "",
+                    image: "",
                     mail: "",
                     phone: "",
                     address: "",
@@ -47,7 +48,10 @@
                         name: "Autres",
                         value: "others",
                     },
-                ]
+                ],
+
+                selectedImage : null,
+                newImage: false
             }
         },
 
@@ -65,7 +69,7 @@
 
             async getAssociationById(){
                 try{
-                    const response = await axios.get(`http://localhost:3000/associations/${this.$route.params.id}`);
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/associations/${this.$route.params.id}`);
                         
                     this.association = {
                         name: response.data.name,
@@ -74,6 +78,7 @@
                         category: response.data.category,
                         representative_name: response.data.representative_name,
                         representative_surname: response.data.representative_surname,
+                        image: response.data.image,
                         mail: response.data.mail,
                         phone: response.data.phone,
                         address: response.data.address,
@@ -84,20 +89,67 @@
                         latitude: response.data.latitude,
                         closed: response.data.closed
                     }
+
+                    const properties = ['siret', 'description', 'representative_name', 'representative_surname', 'mail', 'phone', 'complement_address'];
+
+                    for (let key of properties) {
+                        this.association[key] = this.getNullOrValue(this.association[key]);
+                    }
+
+                    if(this.association.image){
+                        this.selectedImage = `${import.meta.env.VITE_SERVER_URL}/${this.association.image.replace('\public', '')}`;
+                    }else {
+                        this.selectedImage = null;
+                    }
+
                 } catch(err){
                     console.log(err)
                 }
             },
 
+            getNullOrValue(item){
+                item = item == 'null' ? null : item
+            },
+
             async updateAssociation(){
                 try{
+
+                    if(!this.newImage){
+                        delete this.association.image
+                    }
+
                     const boolString = document.querySelector("#closed").value
                     const boolean = (/true/).test(boolString)
                     this.association.closed = boolean
 
-                    const response = await axios.patch(`http://localhost:3000/associations/${this.$route.params.id}`, this.association);
+                    const formData = new FormData();
+                    Object.keys(this.association).forEach(key => {
+                        formData.append(key, this.association[key]);
+                    });
+
+                    await axios.patch(`${import.meta.env.VITE_SERVER_URL}/associations/${this.$route.params.id}`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/associations/${this.$route.params.id}`);
 
                     this.association = response.data;
+
+                    const properties = ['siret', 'description', 'representative_name', 'representative_surname', 'mail', 'phone', 'complement_address'];
+
+                    for (let key of properties) {
+                        this.association[key] = this.getNullOrValue(this.association[key]);
+                    }
+
+                    if(this.association.image){
+                        this.selectedImage = `${import.meta.env.VITE_SERVER_URL}/${this.association.image.replace('\public', '')}`;
+                    } else {
+                        this.selectedImage = null;
+                    }
+
+                    this.newImage = false;
                     
                     window.alert(`${this.association.name} mise à jour !`)
                 } catch(err){
@@ -107,7 +159,20 @@
                         console.log(err);
                     }
                 }
-            }
+            },
+
+            onFileChange(e) {
+                const file = e.target.files[0];
+                this.selectedImage = URL.createObjectURL(file);
+                this.association.image = file;
+                this.newImage = true;
+            },
+
+            removeImage() {
+                this.association.image = 'REMOVE_IMAGE';
+                this.selectedImage = null;
+                this.newImage = true;
+            },
         }
     }
 </script>
@@ -141,6 +206,17 @@
                         
                         <div>
                             <textarea class="form-description" type="text" placeholder="Description" v-model="association.description"></textarea>
+                        </div>
+
+                        <div class="image">
+                            <div class="dates">
+                                <label>Image</label>
+                                <input type="file" class="file" accept="image/png, image/jpeg, image/jpg" ref="file" @change="onFileChange">
+                            </div>
+                            <div>
+                                <img v-if="selectedImage" :src="selectedImage" alt="Selected image">
+                                <button v-if="selectedImage" @click="removeImage">Remove image</button>
+                            </div>
                         </div>
                     </div>
                     

@@ -1,5 +1,7 @@
 <script>
     import axios from "axios"
+    import logo from "../assets/images/logo.svg"
+
     import L, { map, marker } from "leaflet"
     import markerIcon from 'leaflet/dist/images/marker-icon.png';
     import markerIconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -39,10 +41,16 @@
         methods:{
             async getEvents(){
                 try {
-                    const response = await axios.get("http://localhost:3000/events");
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/events`);
                     this.items = response.data
 
                     this.items.forEach((item) =>{
+                        if(item.image === null){
+                            item.image = logo;
+                        } else {
+                            item.image = `${import.meta.env.VITE_SERVER_URL}/${item.image.replace('\public', '')}`
+                        }
+
                         const marker = L.marker([item.longitude, item.latitude]).addTo(this.map)
                         marker.bindPopup(`${item.name}`)
 
@@ -56,7 +64,7 @@
             async deleteEvent(id){
                 try{
                     await axios.delete(
-                        `http://localhost:3000/events/${id}`
+                        `${import.meta.env.VITE_SERVER_URL}/events/${id}`
                     )
                     this.getEvents()
                 }catch(err){
@@ -77,12 +85,13 @@
             <div id="map"></div>
         </div>
 
-    <div class="container-modif">
+        <div class="container-modif">
 
         <table>
 
             <thead>
                 <tr id="tab-titles">
+                    <th>Images</th>
                     <th>Evènements</th>
                     <th>Actions</th>
                 </tr>
@@ -90,6 +99,9 @@
 
             <tbody>
                 <tr v-for="item in items" :key='item.id'>
+                    <td>
+                        <img v-if="item.image" :src="item.image" alt="image de l'évènement" width="100px">
+                    </td>
                     <td>
                         <router-link :to="{name:'SingleEvent', params:{id: item.id}}">{{ item.name }}</router-link>
                     </td>
@@ -127,7 +139,7 @@ table{
     
     tr{
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         align-items: center;
         width: 58vw;
         border-radius: 15px;
@@ -138,8 +150,6 @@ table{
         border-image: linear-gradient(0.25turn, rgba(0, 0, 139, 0), rgba(0, 0, 0, 0.412), rgba(153, 50, 204, 0)) 1;
         border-image-slice: 0 0 1 0;
 
-
-        
         th{
             padding: 1% 5%;
             margin-inline: auto;
@@ -151,6 +161,16 @@ table{
         
         td{
             margin-inline: auto;
+            text-align: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
         }
     }
     
@@ -203,6 +223,8 @@ table tr td:first-child {
     font-weight: 600;
     font-size: 15px;
     font-family: Poppins;
+    min-width: 90px;
+    min-height: 30px;
 
     &-modifier {
         background: #60E886;

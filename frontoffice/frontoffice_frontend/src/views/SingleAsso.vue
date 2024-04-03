@@ -57,6 +57,8 @@
                         icone: IconeOthers,
                     },
                 ],
+
+                selectedImage : null,
             }
         },
 
@@ -68,7 +70,7 @@
             async getAssociationById() {
                 try {
                     const response = await axios.get(
-                    `http://localhost:4000/associations/${this.$route.params.id}`
+                    `${import.meta.env.VITE_SERVER_URL}/associations/${this.$route.params.id}`
                     );
                     this.association = response.data;
 
@@ -76,6 +78,14 @@
                     this.association.bg = this.categories.find(category => category.value === this.association.category).bg;
                     this.association.icone = this.categories.find(category => category.value === this.association.category).icone;
                     this.association.categoryName = this.categories.find(category => category.value === this.association.category).name;
+
+                    
+                    if(this.association.image === null){
+                        this.selectedImage = null;
+                    } else {
+                        this.selectedImage = `${import.meta.env.VITE_SERVER_URL}/${this.association.image.replace('\public', '')}`
+                        console.log(this.selectedImage)
+                    }
 
                 } catch (err) {
                     console.log(err);
@@ -103,7 +113,7 @@
             <div class="asso-information" :style="{ backgroundColor: this.association.color }">
                 
                 <div class="section-first">
-                    <img src="../assets/imgTest.png" alt="">
+                    <img v-if="selectedImage" :src="selectedImage" alt="image de l'évènement" class="img">
                     <div class="section category">
                         <h2>{{ this.association.categoryName }}</h2>
                         <img :src="this.association.icone" alt="Icone de la catégorie">

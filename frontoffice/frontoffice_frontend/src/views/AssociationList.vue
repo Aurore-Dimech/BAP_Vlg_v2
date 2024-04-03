@@ -58,7 +58,7 @@ export default {
         methods:{
             async getAssociations(){
                 try {
-                    const response = await axios.get("http://localhost:4000/associations");
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/associations`);
                     this.items = response.data
 
                     this.items.forEach(item => {
@@ -73,7 +73,7 @@ export default {
                 this.items = [];
 
                 const response = await axios.get(
-                    `http://localhost:4000/associations/category/${category}`
+                    `${import.meta.env.VITE_SERVER_URL}/associations/category/${category}`
                 );
                 this.items = response.data;
 
@@ -87,7 +87,7 @@ export default {
                     this.items = [];
                     this.search = []
 
-                    let response = await axios.get(`http://localhost:4000/associations/search/${this.searchInput}`)
+                    let response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/associations/search/${this.searchInput}`)
                     this.items = response.data
                     this.searchInput= ''
 

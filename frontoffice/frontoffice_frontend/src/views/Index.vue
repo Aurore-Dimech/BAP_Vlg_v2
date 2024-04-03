@@ -83,7 +83,7 @@ export default {
         async getAssociations() {
             try {
                 const response = await axios.get(
-                    "http://localhost:4000/associations"
+                    `${import.meta.env.VITE_SERVER_URL}/associations`	
                 );
                 this.items = response.data;
 

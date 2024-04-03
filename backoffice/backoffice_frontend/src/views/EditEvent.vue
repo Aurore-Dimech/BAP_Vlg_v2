@@ -45,7 +45,7 @@
 
             async getEventById(){
                 try{
-                    const response = await axios.get(`http://localhost:3000/events/${this.$route.params.id}`);
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/events/${this.$route.params.id}`);
                         
                     this.event = {
                         name: response.data.name,
@@ -69,7 +69,11 @@
                     this.event.complement_address = this.event.complement_address == 'null' ? null : this.event.complement_address
                     this.event.description = this.event.description == 'null' ? null : this.event.description
 
-                    this.selectedImage = `http://localhost:3000/${this.event.image}`;
+                    if(this.event.image){
+                        this.selectedImage = `${import.meta.env.VITE_SERVER_URL}/${this.event.image.replace('\public', '')}`;
+                    }else {
+                        this.selectedImage = null;
+                    }
                 } catch(err){
                     console.log(err)
                 }
@@ -90,13 +94,13 @@
                         formData.append(key, this.event[key]);
                     });
 
-                    const rep = await axios.patch(`http://localhost:3000/events/${this.$route.params.id}`, formData, {
+                    await axios.patch(`${import.meta.env.VITE_SERVER_URL}/events/${this.$route.params.id}`, formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
                     });
 
-                    const response = await axios.get(`http://localhost:3000/events/${this.$route.params.id}`);
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/events/${this.$route.params.id}`);
                     
                     this.event = {
                         name: response.data.name,
@@ -121,8 +125,11 @@
                     this.event.complement_address = this.event.complement_address == 'null' ? null : this.event.complement_address
                     this.event.description = this.event.description == 'null' ? null : this.event.description
 
-                    // this.selectedImage = `http://localhost:3000/${this.event.image}`;
-                    this.selectedImage = `${process.env.VUE_APP_SERVER_URL}/${this.event.image}`;
+                    if(this.event.image){
+                        this.selectedImage = `${import.meta.env.VITE_SERVER_URL}/${this.event.image.replace('\public', '')}`;
+                    }else {
+                        this.selectedImage = null;
+                    }
 
                     this.newImage = false;
 
@@ -137,7 +144,7 @@
             },
             async getAssociations(){
                 try {
-                    const response = await axios.get("http://localhost:3000/associations");
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/associations`);
                     this.associations = response.data
                 } catch(err) {
                     console.log(err)

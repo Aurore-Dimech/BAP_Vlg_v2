@@ -1,5 +1,6 @@
 <script>
     import axios from "axios"
+    import logo from "../assets/images/logo.svg"
 
     
     export default {
@@ -16,8 +17,16 @@
         methods:{
             async getClosedAssos(){
                 try {
-                    const response = await axios.get("http://localhost:3000/associations/deleted");
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/associations/deleted`);
                     this.associations = response.data
+
+                    this.associations.forEach(association => {
+                        if(association.image === null){
+                            association.image = logo;
+                        } else {
+                            association.image = `${import.meta.env.VITE_SERVER_URL}/${association.image.replace('\public', '')}`
+                        }
+                    });
                 } catch(err) {
                     console.log(err)
                 }
@@ -34,6 +43,7 @@
  
              <thead>
                  <tr id="tab-titles">
+                    <th>Images</th>
                      <th>Associations</th>
                      <th>Actions</th>
                  </tr>
@@ -41,6 +51,9 @@
  
              <tbody>
                  <tr v-for="association in associations" :key='association.id' >
+                    <td>
+                        <img v-if="association.image" :src="association.image" alt="image de l'association" width="100px">
+                    </td>
                      <td>
                          <router-link :to="{name:'SingleAsso', params:{id: association.id}}"> {{ association.name }}</router-link>
                      </td>
@@ -64,7 +77,7 @@ table{
     
     tr{
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         align-items: center;
         width: 58vw;
         border-radius: 15px;
@@ -82,6 +95,16 @@ table{
         
         td{
             margin-inline: auto;
+            text-align: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
         }
     }
     

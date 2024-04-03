@@ -47,11 +47,13 @@
         methods:{
             async getEvents(){
                 try {
-                    const response = await axios.get("http://localhost:4000/events");
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/events`);
                     this.items = response.data
 
                     for (let item of this.items) {
                         const response = await this.findAssociatedAsso(item.id_association);
+
+                        console.log(response)
 
                         item.association = response
 
@@ -66,7 +68,7 @@
             async findAssociatedAsso(id) {
                 try {
                     const response = await axios.get(
-                    `http://localhost:4000/events/association/${Number(id)}`
+                    `${import.meta.env.VITE_SERVER_URL}/events/association/${Number(id)}`
                     );
                     return response.data
                 } catch (err) {
@@ -79,7 +81,7 @@
                     this.items = [];
                     this.search = []
 
-                    let response = await axios.get(`http://localhost:4000/events/search/${this.searchInput}`)
+                    let response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/events/search/${this.searchInput}`)
                     this.items = response.data
                     this.searchInput= ''
 

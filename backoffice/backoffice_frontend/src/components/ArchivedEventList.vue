@@ -1,5 +1,6 @@
 <script>
     import axios from "axios"
+    import logo from "../assets/images/logo.svg"
 
     
     export default {
@@ -16,8 +17,16 @@
         methods:{
             async getArchivedEvents(){
                 try {
-                    const response = await axios.get("http://localhost:3000/events/archived");
+                    const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/events/archived`);
                     this.events = response.data
+
+                    this.events.forEach((event) =>{
+                        if(event.image === null){
+                            event.image = logo;
+                        } else {
+                            event.image = `${import.meta.env.VITE_SERVER_URL}/${event.image.replace('\public', '')}`
+                        }
+                    })
                 } catch(err) {
                     console.log(err)
                 }
@@ -34,6 +43,7 @@
 
             <thead>
                 <tr id="tab-titles">
+                    <th>Images</th>
                     <th>Evenements</th>
                     <th>Actions</th>
                 </tr>
@@ -41,6 +51,9 @@
 
             <tbody>
                 <tr v-for="event in events" :key='event.id' >
+                    <td>
+                        <img v-if="event.image" :src="event.image" alt="image de l'évènement" width="100px">
+                    </td>
                     <td>
                         <router-link :to="{name:'SingleEvent', params:{id: event.id}}"> {{ event.name }}</router-link>
                     </td>
@@ -64,7 +77,7 @@ table{
     
     tr{
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         align-items: center;
         width: 58vw;
         border-radius: 15px;
@@ -82,6 +95,11 @@ table{
         
         td{
             margin-inline: auto;
+            text-align: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
     
